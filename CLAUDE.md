@@ -108,10 +108,10 @@ git config user.name "Juan Carlos Romaina"
 1. Create feature branch: `feature/HU-XXX-description`
 2. Implement functionality with tests
 3. Commit with detailed message following format above
-4. Push and create PR to `main`
-5. Assign `otro34` as reviewer
-6. Request Copilot review
-7. Update `docs/seguimiento-historias.md` with completion status
+4. **Update `docs/seguimiento-historias.md`** (see instructions below)
+5. Push and create PR to `main`
+6. Assign `otro34` as reviewer
+7. Request Copilot review
 
 **PR Template:**
 ```markdown
@@ -181,12 +181,171 @@ LOG_LEVEL=info             # Logging level
 ## Implementation Priorities
 
 Per [api-specification.md](docs/api-specification.md):
-1. Set up Node.js + Express with OpenAPI/Swagger
-2. Implement file-based storage layer with atomic operations
-3. Add JWT authentication
-4. Build core API endpoints (auth, users, clients, contracts, purchase-orders, system)
-5. Implement business logic for volume tracking
-6. Add backup functionality
-7. Set up semantic-release
-8. Configure GitHub Actions for CI/CD
-9. Health check and version endpoints
+1. ✅ Set up Node.js + Express with OpenAPI/Swagger
+2. ✅ Implement file-based storage layer with atomic operations
+3. ✅ Add JWT authentication
+4. ⏳ Build core API endpoints (auth ✅, users, clients, contracts, purchase-orders, system)
+5. ⏳ Implement business logic for volume tracking
+6. ⏳ Add backup functionality
+7. ⏳ Set up semantic-release
+8. ⏳ Configure GitHub Actions for CI/CD
+9. ✅ Health check and version endpoints
+
+## 📊 User Story Tracking Process
+
+**IMPORTANTE:** Después de completar cada historia de usuario o sprint, DEBES actualizar el documento de seguimiento.
+
+### Archivo de Seguimiento
+- **Ubicación:** `docs/seguimiento-historias.md`
+- **Propósito:** Mantener registro actualizado de todas las historias implementadas
+- **Actualización:** Después de cada historia completada o al finalizar un sprint
+
+### Pasos para Actualizar el Seguimiento
+
+#### 1. Después de Completar una Historia de Usuario
+
+Actualiza estas secciones en `docs/seguimiento-historias.md`:
+
+**a) Resumen General**
+```markdown
+| Métrica | Valor |
+|---------|-------|
+| **Story Points Completados** | [ACTUALIZAR] |
+| **Progreso Global** | [CALCULAR %] |
+| **Historias Completadas** | [ACTUALIZAR] de 52 |
+```
+
+**b) Estado por Epic**
+- Marcar la historia como ✅ Completado
+- Actualizar el % de completado del epic
+- Agregar notas relevantes
+
+**c) Progreso por Sprint**
+- Actualizar el sprint actual con la historia completada
+- Agregar branch y commit hash
+- Listar entregables clave
+
+**d) Archivos Clave**
+- Listar los archivos principales creados/modificados
+
+**e) Actualizar fecha**
+```markdown
+**Última actualización:** [FECHA ACTUAL]
+```
+
+#### 2. Después de Completar un Sprint
+
+**a) Cerrar el Sprint Actual**
+- Marcar como ✅ Completado
+- Actualizar fecha de finalización
+- Listar todas las historias completadas
+- Agregar branch y commits
+- Documentar entregables completos
+
+**b) Crear Sección para Próximo Sprint**
+```markdown
+### ⏳ Sprint X: [Nombre] (Próximo)
+**Story Points:** X puntos
+**Fecha Estimada:** Por definir
+
+**Historias Planificadas:**
+- ⏳ HU-XXX: [Título] (X pts)
+- ⏳ HU-XXX: [Título] (X pts)
+```
+
+**c) Actualizar Métricas de Calidad**
+- Coverage actual
+- Número de tests
+- Tests pasando/fallando
+
+**d) Actualizar Próximos Pasos**
+- Listar objetivos del siguiente sprint
+- Identificar deuda técnica nueva
+
+#### 3. Template de Actualización por Historia
+
+```markdown
+## En el Epic correspondiente:
+| HU-XXX | [Título] | X | ✅ Completado | Sprint X | [Descripción breve] |
+
+## En Progreso por Sprint:
+**Historias Completadas:**
+- ✅ HU-XXX: [Título] (X pts)
+
+**Archivos Clave:**
+- `path/to/file.ts` - [Descripción]
+- `tests/file.http` - [Descripción]
+
+**Branch:** `feature/HU-XXX-description`
+**Commit:** `[hash]`
+```
+
+#### 4. Verificación Antes de Commit
+
+Antes de hacer commit, verifica que actualizaste:
+- [ ] ✅ Resumen General (story points, progreso)
+- [ ] ✅ Estado por Epic (marcar historia)
+- [ ] ✅ Progreso por Sprint (agregar detalles)
+- [ ] ✅ Archivos Clave (listar archivos nuevos)
+- [ ] ✅ Métricas de Calidad (si cambió coverage)
+- [ ] ✅ Fecha de última actualización
+
+#### 5. Comandos Git para el Seguimiento
+
+```bash
+# Después de actualizar seguimiento-historias.md
+git add docs/seguimiento-historias.md
+git commit -m "docs(tracking): update user story tracking after [HU-XXX]"
+
+# O incluir en el commit principal de la feature
+git add .
+git commit -m "feat(scope): complete [HU-XXX] - [description]
+
+[Descripción detallada]
+
+Updated docs/seguimiento-historias.md with completion status.
+"
+```
+
+### Ejemplo de Actualización Completa
+
+Después de completar HU-004 (JWT Authentication):
+
+```markdown
+## Resumen General
+| **Story Points Completados** | 39 |  ← Actualizado de 31
+| **Progreso Global** | 13.4% |      ← Calculado (39/291)
+| **Historias Completadas** | 7 de 52 | ← Actualizado de 6
+
+## Epic 2: Authentication & Security ✅
+| HU-004 | JWT Authentication System | 8 | ✅ Completado | Sprint 2 | JWT, login/register |
+
+## Sprint 2: Authentication & Security (Completado)
+**Historias Completadas:**
+- ✅ HU-004: JWT Authentication System (8 pts)
+
+**Branch:** `feature/HU-004-sprint-2-auth`
+**Commit:** `abc1234`
+
+**Archivos Clave:**
+- `src/middleware/auth.ts` - JWT middleware
+- `src/services/AuthService.ts` - Auth service
+- `tests/auth.http` - HTTP tests
+
+**Última actualización:** 2025-10-06
+```
+
+### Notas Importantes
+
+1. **Siempre actualiza el documento antes de hacer PR**
+2. **Incluye el update del seguimiento en tu commit**
+3. **Verifica que los números cuadren** (story points, %)
+4. **Mantén el formato consistente**
+5. **Agrega notas técnicas relevantes**
+6. **Actualiza la fecha de última modificación**
+
+### Recursos
+
+- [User Stories](docs/user-stories.md) - Lista completa de historias
+- [Development Plan](docs/development-plan.md) - Plan de sprints
+- [Seguimiento de Historias](docs/seguimiento-historias.md) - Documento a actualizar
