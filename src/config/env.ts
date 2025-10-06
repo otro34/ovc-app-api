@@ -23,3 +23,17 @@ export const config = {
     maxRequests: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS || '100', 10),
   },
 };
+
+// Simplified export for easier access
+export const env = {
+  port: config.port,
+  nodeEnv: config.nodeEnv,
+  dataDir: config.dataDir,
+  jwtSecret: config.jwt.secret,
+  jwtExpiration: config.jwt.expiration,
+  logLevel: config.logging.level,
+  backupEnabled: config.backup.enabled,
+  backupFrequency: config.backup.frequency,
+  rateLimitWindowMs: config.rateLimit.windowMs,
+  rateLimitMaxRequests: config.rateLimit.maxRequests,
+};

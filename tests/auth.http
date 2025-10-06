@@ -1,0 +1,80 @@
+### Variables
+@baseUrl = http://localhost:3001/api/v1
+@token =
+
+### Register a new user
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "admin123",
+  "email": "admin@ovc-app.com",
+  "name": "Administrator",
+  "role": "admin"
+}
+
+### Register a regular user
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "username": "user1",
+  "password": "user123",
+  "email": "user1@ovc-app.com",
+  "name": "Regular User",
+  "role": "user"
+}
+
+### Login with admin
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "admin123"
+}
+
+### Login with regular user
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "username": "user1",
+  "password": "user123"
+}
+
+### Login with invalid credentials
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "wrongpassword"
+}
+
+### Get current user (requires token)
+GET {{baseUrl}}/auth/me
+Authorization: Bearer {{token}}
+
+### Change password (requires token)
+POST {{baseUrl}}/auth/change-password
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "currentPassword": "admin123",
+  "newPassword": "newadmin123",
+  "confirmPassword": "newadmin123"
+}
+
+### Logout (requires token)
+POST {{baseUrl}}/auth/logout
+Authorization: Bearer {{token}}
+
+### Test without token (should fail)
+GET {{baseUrl}}/auth/me
+
+### Test with invalid token (should fail)
+GET {{baseUrl}}/auth/me
+Authorization: Bearer invalid-token-here
