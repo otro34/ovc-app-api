@@ -1,6 +1,6 @@
 ### Variables
 @baseUrl = http://localhost:3001/api/v1
-@token =
+@token = 
 
 ### Register a new user
 POST {{baseUrl}}/auth/register
