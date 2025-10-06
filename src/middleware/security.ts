@@ -16,11 +16,8 @@ export const apiRateLimiter = rateLimit({
     timestamp: new Date().toISOString()
   },
   standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
-  legacyHeaders: false, // Disable the `X-RateLimit-*` headers
-  // Store clients by IP address
-  keyGenerator: (req: Request): string => {
-    return req.ip || req.socket.remoteAddress || 'unknown';
-  }
+  legacyHeaders: false // Disable the `X-RateLimit-*` headers
+  // Use default keyGenerator which properly handles IPv6
 });
 
 // Stricter rate limiter for authentication endpoints
@@ -37,10 +34,8 @@ export const authRateLimiter = rateLimit({
     timestamp: new Date().toISOString()
   },
   standardHeaders: true,
-  legacyHeaders: false,
-  keyGenerator: (req: Request): string => {
-    return req.ip || req.socket.remoteAddress || 'unknown';
-  }
+  legacyHeaders: false
+  // Use default keyGenerator which properly handles IPv6
 });
 
 // Input sanitization middleware
