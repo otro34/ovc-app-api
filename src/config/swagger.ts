@@ -151,6 +151,90 @@ const swaggerDefinition = {
           },
         },
       },
+      CreateUserRequest: {
+        type: 'object',
+        required: ['username', 'password'],
+        properties: {
+          username: {
+            type: 'string',
+            minLength: 3,
+            maxLength: 50,
+            description: 'Username (alphanumeric and underscores only)',
+            example: 'johndoe',
+          },
+          password: {
+            type: 'string',
+            format: 'password',
+            minLength: 6,
+            maxLength: 100,
+            description: 'User password',
+            example: 'password123',
+          },
+          email: {
+            type: 'string',
+            format: 'email',
+            description: 'User email address',
+            example: 'john@example.com',
+          },
+          name: {
+            type: 'string',
+            maxLength: 100,
+            description: 'User full name',
+            example: 'John Doe',
+          },
+          role: {
+            type: 'string',
+            enum: ['admin', 'user'],
+            description: 'User role',
+            default: 'user',
+            example: 'user',
+          },
+        },
+      },
+      UpdateUserRequest: {
+        type: 'object',
+        properties: {
+          username: {
+            type: 'string',
+            minLength: 3,
+            maxLength: 50,
+            description: 'Username (alphanumeric and underscores only)',
+            example: 'johndoe',
+          },
+          email: {
+            type: 'string',
+            format: 'email',
+            description: 'User email address',
+            example: 'john@example.com',
+          },
+          name: {
+            type: 'string',
+            maxLength: 100,
+            description: 'User full name',
+            example: 'John Doe',
+          },
+          role: {
+            type: 'string',
+            enum: ['admin', 'user'],
+            description: 'User role',
+            example: 'user',
+          },
+        },
+      },
+      PaginatedUsers: {
+        type: 'object',
+        properties: {
+          items: {
+            type: 'array',
+            items: {
+              $ref: '#/components/schemas/User',
+            },
+          },
+          pagination: {
+            $ref: '#/components/schemas/PaginationMeta',
+          },
+        },
+      },
       SuccessResponse: {
         type: 'object',
         properties: {

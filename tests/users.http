@@ -1,0 +1,170 @@
+### Variables
+@baseUrl = http://localhost:3001/api/v1
+@token = your_jwt_token_here
+@userId = 1
+
+### ========================================
+### USER MANAGEMENT ENDPOINTS
+### ========================================
+
+### Get all users (admin only)
+GET {{baseUrl}}/users
+Authorization: Bearer {{token}}
+
+### Get all users with pagination
+GET {{baseUrl}}/users?page=1&limit=10
+Authorization: Bearer {{token}}
+
+### Get users filtered by role
+GET {{baseUrl}}/users?role=admin
+Authorization: Bearer {{token}}
+
+### Search users
+GET {{baseUrl}}/users?search=john
+Authorization: Bearer {{token}}
+
+### Get user statistics
+GET {{baseUrl}}/users/stats
+Authorization: Bearer {{token}}
+
+### Get user by ID
+GET {{baseUrl}}/users/{{userId}}
+Authorization: Bearer {{token}}
+
+### Create a new user (admin only)
+POST {{baseUrl}}/users
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "username": "johndoe",
+  "password": "password123",
+  "email": "john@example.com",
+  "name": "John Doe",
+  "role": "user"
+}
+
+### Create admin user
+POST {{baseUrl}}/users
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "username": "newadmin",
+  "password": "admin123456",
+  "email": "admin@example.com",
+  "name": "New Admin",
+  "role": "admin"
+}
+
+### Update user
+PUT {{baseUrl}}/users/{{userId}}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "John Doe Updated",
+  "email": "john.updated@example.com"
+}
+
+### Update user role
+PUT {{baseUrl}}/users/{{userId}}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "role": "admin"
+}
+
+### Update user password (admin only)
+PUT {{baseUrl}}/users/{{userId}}/password
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "newPassword": "newpassword123"
+}
+
+### Delete user
+DELETE {{baseUrl}}/users/{{userId}}
+Authorization: Bearer {{token}}
+
+### ========================================
+### VALIDATION TESTS
+### ========================================
+
+### Create user - Missing required fields
+POST {{baseUrl}}/users
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "email": "test@example.com"
+}
+
+### Create user - Invalid username format
+POST {{baseUrl}}/users
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "username": "john doe",
+  "password": "password123",
+  "role": "user"
+}
+
+### Create user - Password too short
+POST {{baseUrl}}/users
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "username": "testuser",
+  "password": "123",
+  "role": "user"
+}
+
+### Create user - Invalid email
+POST {{baseUrl}}/users
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "username": "testuser",
+  "password": "password123",
+  "email": "invalid-email",
+  "role": "user"
+}
+
+### Create user - Invalid role
+POST {{baseUrl}}/users
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "username": "testuser",
+  "password": "password123",
+  "role": "superadmin"
+}
+
+### ========================================
+### UNAUTHORIZED ACCESS TESTS
+### ========================================
+
+### Get users without token
+GET {{baseUrl}}/users
+
+### Get users with invalid token
+GET {{baseUrl}}/users
+Authorization: Bearer invalid_token
+
+### Create user without admin role (use regular user token)
+POST {{baseUrl}}/users
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "username": "testuser",
+  "password": "password123",
+  "role": "user"
+}

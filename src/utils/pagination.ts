@@ -63,3 +63,16 @@ export function calculatePaginationMeta(total: number, page: number, limit: numb
     hasPrev: page > 1,
   };
 }
+
+/**
+ * Paginate array and return with metadata
+ */
+export function paginate<T>(items: T[], page: number, limit: number) {
+  const paginatedItems = paginateArray(items, page, limit);
+  const pagination = calculatePaginationMeta(items.length, page, limit);
+
+  return {
+    items: paginatedItems,
+    pagination,
+  };
+}
