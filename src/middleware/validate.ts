@@ -19,8 +19,8 @@ export function validate(schema: ZodSchema, target: ValidationTarget = 'body') {
 
       // Check if schema expects nested structure (body/query/params keys)
       const schemaShape = (schema as { shape?: Record<string, unknown> }).shape;
-      const hasNestedStructure = schemaShape &&
-        (schemaShape.body || schemaShape.query || schemaShape.params);
+      const hasNestedStructure =
+        schemaShape && (schemaShape.body || schemaShape.query || schemaShape.params);
 
       if (hasNestedStructure) {
         // Schema expects full request structure

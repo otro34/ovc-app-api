@@ -105,13 +105,29 @@ git config user.name "Juan Carlos Romaina"
 
 ## Pull Request Process
 
+**CRITICAL: Always run quality checks BEFORE creating PR:**
+
+```bash
+# 1. Run linter and fix issues
+npm run lint
+
+# 2. Run tests
+npm test
+
+# 3. Build the application
+npm run build
+```
+
+**Only proceed with PR if all checks pass!**
+
 1. Create feature branch: `feature/HU-XXX-description`
 2. Implement functionality with tests
-3. Commit with detailed message following format above
-4. **Update `docs/seguimiento-historias.md`** (see instructions below)
-5. Push and create PR to `main`
-6. Assign `otro34` as reviewer
-7. Request Copilot review
+3. **Run quality checks** (linter, tests, build) - **MANDATORY**
+4. Commit with detailed message following format above
+5. **Update `docs/seguimiento-historias.md`** (see instructions below)
+6. Push and create PR to `main`
+7. Assign `otro34` as reviewer
+8. Request Copilot review
 
 **PR Template:**
 ```markdown

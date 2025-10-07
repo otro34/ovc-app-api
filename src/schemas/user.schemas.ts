@@ -89,7 +89,11 @@ export const getUsersQuerySchema = z.object({
     .object({
       role: z.enum(['admin', 'user']).optional(),
       search: z.string().optional(),
-      page: z.string().regex(/^\d+$/, 'Page must be a positive number').transform(Number).optional(),
+      page: z
+        .string()
+        .regex(/^\d+$/, 'Page must be a positive number')
+        .transform(Number)
+        .optional(),
       limit: z
         .string()
         .regex(/^\d+$/, 'Limit must be a positive number')
