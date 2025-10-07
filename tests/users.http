@@ -1,6 +1,8 @@
 ### Variables
 @baseUrl = http://localhost:3001/api/v1
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5Ab3ZjLWFwcC5jb20iLCJuYW1lIjoiQWRtaW5pc3RyYXRvciIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc1OTg2NDEzOSwiZXhwIjoxNzU5ODkyOTM5fQ.HUc74NX-lJTok9OGZ8sP1nbvGHEsgjGHaUyqqATBtU4
+# Set your JWT token as an environment variable before running these tests:
+# In VS Code REST Client, use "env" or set {{JWT_TOKEN}} in your environment.
+@token = {{JWT_TOKEN}}
 @userId = 1
 
 ### ========================================
