@@ -85,14 +85,17 @@ export const updateUserPasswordSchema = z.object({
  * Schema for filtering/searching users
  */
 export const getUsersQuerySchema = z.object({
-  query: z.object({
-    role: z.enum(['admin', 'user']).optional(),
-    search: z.string().optional(),
-    page: z.string().regex(/^\d+$/, 'Page must be a positive number').transform(Number).optional(),
-    limit: z
-      .string()
-      .regex(/^\d+$/, 'Limit must be a positive number')
-      .transform(Number)
-      .optional(),
-  }),
+  query: z
+    .object({
+      role: z.enum(['admin', 'user']).optional(),
+      search: z.string().optional(),
+      page: z.string().regex(/^\d+$/, 'Page must be a positive number').transform(Number).optional(),
+      limit: z
+        .string()
+        .regex(/^\d+$/, 'Limit must be a positive number')
+        .transform(Number)
+        .optional(),
+    })
+    .optional()
+    .default({}),
 });

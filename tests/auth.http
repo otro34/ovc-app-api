@@ -1,7 +1,7 @@
 ### Variables
 @baseUrl = http://localhost:3001/api/v1
 # Paste your JWT token below, or use the get-token.sh script to obtain one.
-@token = 
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJhZG1pbiIsImVtYWlsIjoiYWRtaW5Ab3ZjLWFwcC5jb20iLCJuYW1lIjoiQWRtaW5pc3RyYXRvciIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc1OTg2NDEzOSwiZXhwIjoxNzU5ODkyOTM5fQ.HUc74NX-lJTok9OGZ8sP1nbvGHEsgjGHaUyqqATBtU4
 
 ### Register a new user
 POST {{baseUrl}}/auth/register
