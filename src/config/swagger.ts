@@ -208,6 +208,94 @@ const swaggerDefinition = {
             description: 'Error timestamp'
           }
         }
+      },
+      PaginationMeta: {
+        type: 'object',
+        properties: {
+          page: {
+            type: 'integer',
+            description: 'Current page number',
+            example: 1
+          },
+          limit: {
+            type: 'integer',
+            description: 'Items per page',
+            example: 10
+          },
+          total: {
+            type: 'integer',
+            description: 'Total number of items',
+            example: 100
+          },
+          totalPages: {
+            type: 'integer',
+            description: 'Total number of pages',
+            example: 10
+          },
+          hasNext: {
+            type: 'boolean',
+            description: 'Whether there is a next page',
+            example: true
+          },
+          hasPrev: {
+            type: 'boolean',
+            description: 'Whether there is a previous page',
+            example: false
+          }
+        }
+      },
+      PaginatedResponse: {
+        type: 'object',
+        properties: {
+          success: {
+            type: 'boolean',
+            description: 'Success status',
+            example: true
+          },
+          data: {
+            type: 'array',
+            items: {
+              type: 'object'
+            },
+            description: 'Response data'
+          },
+          message: {
+            type: 'string',
+            description: 'Response message',
+            example: 'Success'
+          },
+          timestamp: {
+            type: 'string',
+            format: 'date-time',
+            description: 'Response timestamp'
+          },
+          meta: {
+            $ref: '#/components/schemas/PaginationMeta'
+          }
+        }
+      },
+      ValidationErrorDetails: {
+        type: 'object',
+        properties: {
+          field: {
+            type: 'string',
+            description: 'Field name that failed validation',
+            example: 'username'
+          },
+          message: {
+            type: 'string',
+            description: 'Validation error message',
+            example: 'Username must be at least 3 characters'
+          },
+          code: {
+            type: 'string',
+            description: 'Validation error code',
+            example: 'too_small'
+          },
+          received: {
+            description: 'Received value (if applicable)'
+          }
+        }
       }
     },
     responses: {
@@ -276,10 +364,23 @@ const swaggerDefinition = {
             },
             example: {
               success: false,
-              message: 'Validation error',
+              message: 'Request validation failed',
               error: {
-                code: 'VALIDATION_ERROR',
-                message: 'Missing required fields'
+                code: 'VAL_2001',
+                message: 'Validation failed',
+                details: [
+                  {
+                    field: 'username',
+                    message: 'Username must be at least 3 characters',
+                    code: 'too_small',
+                    received: 'ab'
+                  },
+                  {
+                    field: 'email',
+                    message: 'Invalid email format',
+                    code: 'invalid_string'
+                  }
+                ]
               },
               timestamp: '2025-10-06T11:00:00.000Z'
             }

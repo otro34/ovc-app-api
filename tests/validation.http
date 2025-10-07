@@ -1,0 +1,117 @@
+### Test login with missing fields (should fail validation)
+POST http://localhost:3001/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "username": ""
+}
+
+### Test login with valid data
+POST http://localhost:3001/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "admin123"
+}
+
+### Test register with invalid username (too short)
+POST http://localhost:3001/api/v1/auth/register
+Content-Type: application/json
+
+{
+  "username": "ab",
+  "password": "password123"
+}
+
+### Test register with invalid username (special characters)
+POST http://localhost:3001/api/v1/auth/register
+Content-Type: application/json
+
+{
+  "username": "user@invalid",
+  "password": "password123"
+}
+
+### Test register with weak password (too short)
+POST http://localhost:3001/api/v1/auth/register
+Content-Type: application/json
+
+{
+  "username": "newuser",
+  "password": "12345"
+}
+
+### Test register with invalid email
+POST http://localhost:3001/api/v1/auth/register
+Content-Type: application/json
+
+{
+  "username": "newuser",
+  "password": "password123",
+  "email": "invalid-email"
+}
+
+### Test register with valid data
+POST http://localhost:3001/api/v1/auth/register
+Content-Type: application/json
+
+{
+  "username": "validuser",
+  "password": "password123",
+  "email": "user@example.com",
+  "name": "Valid User"
+}
+
+### Test change password with missing fields
+# First login to get token
+POST http://localhost:3001/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "admin123"
+}
+
+###
+@token = {{your-token-here}}
+
+### Test change password with mismatched passwords
+POST http://localhost:3001/api/v1/auth/change-password
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "currentPassword": "admin123",
+  "newPassword": "newpassword123",
+  "confirmPassword": "different123"
+}
+
+### Test change password with weak new password
+POST http://localhost:3001/api/v1/auth/change-password
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "currentPassword": "admin123",
+  "newPassword": "123",
+  "confirmPassword": "123"
+}
+
+### Test change password with valid data
+POST http://localhost:3001/api/v1/auth/change-password
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "currentPassword": "admin123",
+  "newPassword": "newpassword123",
+  "confirmPassword": "newpassword123"
+}
+
+### Test 404 error (non-existent route)
+GET http://localhost:3001/api/v1/nonexistent
+
+### Test error response format
+GET http://localhost:3001/api/v1/auth/me
+Authorization: Bearer invalid-token

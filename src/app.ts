@@ -12,6 +12,7 @@ import {
   validateContentType,
   securityHeaders
 } from './middleware/security';
+import { errorHandler, notFoundHandler } from './middleware/errorHandler';
 import { swaggerSpec } from './config/swagger';
 
 const app: Application = express();
@@ -76,31 +77,10 @@ app.get('/version', (_req: Request, res: Response) => {
   });
 });
 
-// 404 handler
-app.use((_req: Request, res: Response) => {
-  res.status(404).json({
-    success: false,
-    error: {
-      code: 'NOT_FOUND',
-      message: 'Resource not found',
-    },
-    timestamp: new Date().toISOString(),
-  });
-});
+// 404 handler - must come before error handler
+app.use(notFoundHandler);
 
-// Error handling middleware
-app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
-  logger.error('Unhandled error:', err);
-
-  res.status(500).json({
-    success: false,
-    error: {
-      code: 'INTERNAL_ERROR',
-      message: config.nodeEnv === 'production' ? 'Internal server error' : err.message,
-      ...(config.nodeEnv !== 'production' && { stack: err.stack }),
-    },
-    timestamp: new Date().toISOString(),
-  });
-});
+// Global error handling middleware - must be last
+app.use(errorHandler);
 
 export default app;

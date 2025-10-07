@@ -1,6 +1,11 @@
-import { Router, Request, Response } from 'express';
+import { Router, Response } from 'express';
 import { AuthService } from '../services/AuthService';
 import { authenticate, AuthRequest } from '../middleware/auth';
+import { successResponse, createdResponse } from '../utils/apiResponse';
+import { ErrorFactory } from '../utils/errors';
+import { asyncHandler } from '../middleware/errorHandler';
+import { validate } from '../middleware/validate';
+import { loginSchema, registerSchema, changePasswordSchema } from '../schemas/auth.schemas';
 import logger from '../config/logger';
 
 const router = Router();
@@ -40,203 +45,93 @@ const authService = new AuthService();
  *         $ref: '#/components/responses/ValidationError'
  */
 // POST /auth/login
-router.post('/login', async (req: Request, res: Response): Promise<void> => {
-  try {
+router.post(
+  '/login',
+  validate(loginSchema),
+  asyncHandler(async (req: AuthRequest, res: Response): Promise<void> => {
     const { username, password } = req.body;
 
-    if (!username || !password) {
-      res.status(400).json({
-        success: false,
-        message: 'Username and password are required',
-        error: {
-          code: 'VALIDATION_ERROR',
-          message: 'Missing required fields'
-        },
-        timestamp: new Date().toISOString()
-      });
-      return;
+    try {
+      const result = await authService.login({ username, password });
+      successResponse(res, result, 'Login successful');
+    } catch (error) {
+      logger.error('Login error:', error);
+      throw ErrorFactory.authenticationFailed('Invalid credentials');
     }
-
-    const result = await authService.login({ username, password });
-
-    res.status(200).json({
-      success: true,
-      data: result,
-      message: 'Login successful',
-      timestamp: new Date().toISOString()
-    });
-  } catch (error) {
-    logger.error('Login error:', error);
-    res.status(401).json({
-      success: false,
-      message: error instanceof Error ? error.message : 'Login failed',
-      error: {
-        code: 'AUTHENTICATION_FAILED',
-        message: 'Invalid credentials'
-      },
-      timestamp: new Date().toISOString()
-    });
-  }
-});
+  })
+);
 
 // POST /auth/register
-router.post('/register', async (req: Request, res: Response): Promise<void> => {
-  try {
+router.post(
+  '/register',
+  validate(registerSchema),
+  asyncHandler(async (req: AuthRequest, res: Response): Promise<void> => {
     const { username, password, email, name, role } = req.body;
 
-    if (!username || !password) {
-      res.status(400).json({
-        success: false,
-        message: 'Username and password are required',
-        error: {
-          code: 'VALIDATION_ERROR',
-          message: 'Missing required fields'
-        },
-        timestamp: new Date().toISOString()
+    try {
+      const user = await authService.register({
+        username,
+        password,
+        email,
+        name,
+        role: role || 'user'
       });
-      return;
+
+      createdResponse(res, user, 'User registered successfully');
+    } catch (error) {
+      logger.error('Registration error:', error);
+      const message = error instanceof Error ? error.message : 'Registration failed';
+      throw ErrorFactory.validationError(message);
     }
-
-    const user = await authService.register({
-      username,
-      password,
-      email,
-      name,
-      role: role || 'user'
-    });
-
-    res.status(201).json({
-      success: true,
-      data: user,
-      message: 'User registered successfully',
-      timestamp: new Date().toISOString()
-    });
-  } catch (error) {
-    logger.error('Registration error:', error);
-    res.status(400).json({
-      success: false,
-      message: error instanceof Error ? error.message : 'Registration failed',
-      error: {
-        code: 'REGISTRATION_FAILED',
-        message: error instanceof Error ? error.message : 'Failed to register user'
-      },
-      timestamp: new Date().toISOString()
-    });
-  }
-});
+  })
+);
 
 // GET /auth/me
-router.get('/me', authenticate, async (req: AuthRequest, res: Response): Promise<void> => {
-  try {
+router.get(
+  '/me',
+  authenticate,
+  asyncHandler(async (req: AuthRequest, res: Response): Promise<void> => {
     if (!req.user?.id) {
-      res.status(401).json({
-        success: false,
-        message: 'Unauthorized',
-        error: {
-          code: 'UNAUTHORIZED',
-          message: 'User not authenticated'
-        },
-        timestamp: new Date().toISOString()
-      });
-      return;
+      throw ErrorFactory.unauthorized('User not authenticated');
     }
 
     const user = await authService.getCurrentUser(req.user.id);
-
-    res.status(200).json({
-      success: true,
-      data: user,
-      message: 'User retrieved successfully',
-      timestamp: new Date().toISOString()
-    });
-  } catch (error) {
-    logger.error('Get current user error:', error);
-    res.status(404).json({
-      success: false,
-      message: 'User not found',
-      error: {
-        code: 'USER_NOT_FOUND',
-        message: error instanceof Error ? error.message : 'Failed to retrieve user'
-      },
-      timestamp: new Date().toISOString()
-    });
-  }
-});
+    successResponse(res, user, 'User retrieved successfully');
+  })
+);
 
 // POST /auth/change-password
-router.post('/change-password', authenticate, async (req: AuthRequest, res: Response): Promise<void> => {
-  try {
+router.post(
+  '/change-password',
+  authenticate,
+  validate(changePasswordSchema),
+  asyncHandler(async (req: AuthRequest, res: Response): Promise<void> => {
     if (!req.user?.id) {
-      res.status(401).json({
-        success: false,
-        message: 'Unauthorized',
-        error: {
-          code: 'UNAUTHORIZED',
-          message: 'User not authenticated'
-        },
-        timestamp: new Date().toISOString()
-      });
-      return;
+      throw ErrorFactory.unauthorized('User not authenticated');
     }
 
-    const { currentPassword, newPassword, confirmPassword } = req.body;
+    const { currentPassword, newPassword } = req.body;
 
-    if (!currentPassword || !newPassword || !confirmPassword) {
-      res.status(400).json({
-        success: false,
-        message: 'All password fields are required',
-        error: {
-          code: 'VALIDATION_ERROR',
-          message: 'Missing required fields'
-        },
-        timestamp: new Date().toISOString()
-      });
-      return;
+    try {
+      await authService.changePassword(req.user.id, currentPassword, newPassword);
+      successResponse(res, null, 'Password changed successfully');
+    } catch (error) {
+      logger.error('Change password error:', error);
+      const message = error instanceof Error ? error.message : 'Failed to change password';
+      throw ErrorFactory.validationError(message);
     }
-
-    if (newPassword !== confirmPassword) {
-      res.status(400).json({
-        success: false,
-        message: 'New password and confirmation do not match',
-        error: {
-          code: 'VALIDATION_ERROR',
-          message: 'Passwords do not match'
-        },
-        timestamp: new Date().toISOString()
-      });
-      return;
-    }
-
-    await authService.changePassword(req.user.id, currentPassword, newPassword);
-
-    res.status(200).json({
-      success: true,
-      message: 'Password changed successfully',
-      timestamp: new Date().toISOString()
-    });
-  } catch (error) {
-    logger.error('Change password error:', error);
-    res.status(400).json({
-      success: false,
-      message: error instanceof Error ? error.message : 'Failed to change password',
-      error: {
-        code: 'PASSWORD_CHANGE_FAILED',
-        message: error instanceof Error ? error.message : 'Failed to change password'
-      },
-      timestamp: new Date().toISOString()
-    });
-  }
-});
+  })
+);
 
 // POST /auth/logout
-router.post('/logout', authenticate, async (_req: AuthRequest, res: Response): Promise<void> => {
-  // Since we're using JWT, logout is handled client-side by removing the token
-  // This endpoint is kept for API consistency and future enhancements (e.g., token blacklist)
-  res.status(200).json({
-    success: true,
-    message: 'Logout successful',
-    timestamp: new Date().toISOString()
-  });
-});
+router.post(
+  '/logout',
+  authenticate,
+  asyncHandler(async (_req: AuthRequest, res: Response): Promise<void> => {
+    // Since we're using JWT, logout is handled client-side by removing the token
+    // This endpoint is kept for API consistency and future enhancements (e.g., token blacklist)
+    successResponse(res, null, 'Logout successful');
+  })
+);
 
 export default router;
