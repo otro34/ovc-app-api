@@ -26,12 +26,10 @@ export class ClientService {
     // Apply search filter
     if (filters?.search) {
       const searchLower = filters.search.toLowerCase();
-      clients = clients.filter(
-        (c) => {
-          const email = c.email ? c.email.toLowerCase() : '';
-          return c.name.toLowerCase().includes(searchLower) || email.includes(searchLower);
-        }
-      );
+      clients = clients.filter((c) => {
+        const email = c.email ? c.email.toLowerCase() : '';
+        return c.name.toLowerCase().includes(searchLower) || email.includes(searchLower);
+      });
     }
 
     return clients;
