@@ -216,17 +216,23 @@ class DataSeeder {
       },
     ];
 
+    // Cache existing client emails (lowercased) for fast lookup
+    const existingClients = await this.clientService.findAll();
+    const existingEmails = new Set<string>(
+      existingClients
+        .map((c) => c.email?.toLowerCase())
+        .filter((email): email is string => !!email)
+    );
+
     for (const clientData of clients) {
       try {
-        // Check if client with same email already exists
-        const existingClients = await this.clientService.findAll();
-        const clientExists = existingClients.some(
-          (c) => c.email?.toLowerCase() === clientData.email.toLowerCase()
-        );
+        const emailLower = clientData.email.toLowerCase();
+        const clientExists = existingEmails.has(emailLower);
 
         if (!clientExists) {
           await this.clientService.create(clientData);
           this.stats.clients++;
+          existingEmails.add(emailLower); // Track newly inserted email
           console.log(`  ✅ Created client: ${clientData.name}`);
         } else {
           console.log(`  ⏭️  Client already exists: ${clientData.name}`);
