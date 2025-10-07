@@ -2,7 +2,7 @@
 
 Este documento registra el progreso de implementación de todas las historias de usuario del proyecto.
 
-**Última actualización:** 2025-10-06 (Sprint 3 completado)
+**Última actualización:** 2025-10-07 (CI/CD en progreso)
 
 ---
 
@@ -11,10 +11,10 @@ Este documento registra el progreso de implementación de todas las historias de
 | Métrica | Valor |
 |---------|-------|
 | **Story Points Totales** | 291 |
-| **Story Points Completados** | 63 |
-| **Progreso Global** | 21.6% |
+| **Story Points Completados** | 68 |
+| **Progreso Global** | 23.4% |
 | **Sprints Completados** | 3 de 15 |
-| **Historias Completadas** | 12 de 52 |
+| **Historias Completadas** | 13 de 52 |
 
 ---
 
@@ -75,6 +75,16 @@ Este documento registra el progreso de implementación de todas las historias de
 | HU-042 | Development Data Seeding | 5 | ⏳ Pendiente | Sprint 5 | - |
 | HU-043 | Development Data Reset | 3 | ⏳ Pendiente | Sprint 5 | - |
 | HU-044 | Hot Reload Development Server | 2 | ✅ Completado | Sprint 1 | ts-node-dev configurado |
+
+### Epic 14: CI/CD & Deployment
+**Completado:** 5/18 puntos (28%)
+
+| HU | Título | Puntos | Estado | Sprint | Notas |
+|----|--------|--------|--------|--------|-------|
+| HU-045 | GitHub Actions CI Pipeline | 5 | ✅ Completado | Sprint 4 | CI workflow: tests, lint, build en Node 18/20 |
+| HU-046 | Semantic Release Setup | 5 | ⏳ Pendiente | Sprint 8 | - |
+| HU-047 | Docker Configuration | 5 | ⏳ Pendiente | Sprint 10 | - |
+| HU-048 | Environment-Specific Configuration | 3 | ⏳ Pendiente | Sprint 10 | - |
 
 ---
 
@@ -172,15 +182,33 @@ Este documento registra el progreso de implementación de todas las historias de
 
 ---
 
-### ⏳ Sprint 4: User Management (Próximo)
-**Story Points:** 21 puntos
-**Fecha Estimada:** Por definir
+### ⏳ Sprint 4: CI/CD & User Management (En Progreso)
+**Story Points:** 5/26 (19%)
+**Fecha Estimada:** 2025-10-07
+
+**Historias Completadas:**
+- ✅ HU-045: GitHub Actions CI Pipeline (5 pts)
 
 **Historias Planificadas:**
 - ⏳ HU-007: User CRUD Operations (8 pts)
 - ⏳ HU-008: User Password Management (3 pts)
 - ⏳ HU-009: User Statistics (2 pts)
 - ⏳ HU-040: Integration Testing (8 pts)
+
+**Branch:** `feature/HU-004-to-HU-029-sprint-2-authentication-security` (continuación)
+**Commits:** `a016b1d`
+
+**Entregables:**
+- ✅ GitHub Actions workflow configurado (.github/workflows/ci.yml)
+- ✅ CI ejecuta tests, lint y build en cada push/PR
+- ✅ Matrix testing con Node 18.x y 20.x
+- ✅ Upload de coverage a Codecov (opcional)
+- ✅ Artifacts de build archivados
+- ⏳ User CRUD (pendiente)
+- ⏳ Integration tests (pendiente)
+
+**Archivos Clave:**
+- `.github/workflows/ci.yml` - GitHub Actions CI pipeline
 
 ---
 
@@ -229,6 +257,13 @@ Este documento registra el progreso de implementación de todas las historias de
 - ✅ Prettier
 - ✅ Winston Logger
 
+### CI/CD
+- ✅ GitHub Actions
+- ✅ Automated testing on PR/push
+- ✅ Multi-version Node testing (18, 20)
+- ⏳ Semantic Release (pendiente)
+- ⏳ Docker (pendiente)
+
 ---
 
 ## 📈 Métricas de Calidad
@@ -255,12 +290,13 @@ Este documento registra el progreso de implementación de todas las historias de
 
 ## 🚀 Próximos Pasos
 
-### Sprint 4 (Siguiente)
-1. Implementar User CRUD Operations (8 pts)
-2. User Password Management (3 pts)
-3. User Statistics (2 pts)
-4. Integration Testing Setup (8 pts)
-5. Crear HTTP test files para users
+### Sprint 4 (En Progreso)
+1. ✅ GitHub Actions CI Pipeline (5 pts) - Completado
+2. Implementar User CRUD Operations (8 pts)
+3. User Password Management (3 pts)
+4. User Statistics (2 pts)
+5. Integration Testing Setup (8 pts)
+6. Crear HTTP test files para users
 
 ### Sprint 5
 1. Implementar Client CRUD Operations
