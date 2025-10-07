@@ -465,7 +465,7 @@ const swaggerDefinition = {
               success: false,
               message: 'Unauthorized',
               error: {
-                code: 'UNAUTHORIZED',
+                code: 'AUTH_1004',
                 message: 'Authentication token is required',
               },
               timestamp: '2025-10-06T11:00:00.000Z',
@@ -484,7 +484,7 @@ const swaggerDefinition = {
               success: false,
               message: 'Forbidden',
               error: {
-                code: 'FORBIDDEN',
+                code: 'AUTH_1005',
                 message: 'You do not have permission to access this resource',
               },
               timestamp: '2025-10-06T11:00:00.000Z',
@@ -502,7 +502,7 @@ const swaggerDefinition = {
             example: {
               success: false,
               error: {
-                code: 'NOT_FOUND',
+                code: 'RES_3001',
                 message: 'Resource not found',
               },
               timestamp: '2025-10-06T11:00:00.000Z',
@@ -552,7 +552,7 @@ const swaggerDefinition = {
             example: {
               success: false,
               error: {
-                code: 'CONFLICT',
+                code: 'BIZ_4002',
                 message: 'Client with this email already exists',
               },
               timestamp: '2025-10-06T11:00:00.000Z',
