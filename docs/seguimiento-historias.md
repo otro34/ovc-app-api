@@ -2,7 +2,7 @@
 
 Este documento registra el progreso de implementación de todas las historias de usuario del proyecto.
 
-**Última actualización:** 2025-10-07 (CI/CD en progreso)
+**Última actualización:** 2025-10-07 (Sprint 4 completado)
 
 ---
 
@@ -11,10 +11,10 @@ Este documento registra el progreso de implementación de todas las historias de
 | Métrica | Valor |
 |---------|-------|
 | **Story Points Totales** | 291 |
-| **Story Points Completados** | 68 |
-| **Progreso Global** | 23.4% |
-| **Sprints Completados** | 3 de 15 |
-| **Historias Completadas** | 13 de 52 |
+| **Story Points Completados** | 89 |
+| **Progreso Global** | 30.6% |
+| **Sprints Completados** | 4 de 15 |
+| **Historias Completadas** | 16 de 52 |
 
 ---
 
@@ -59,12 +59,12 @@ Este documento registra el progreso de implementación de todas las historias de
 | HU-038 | Request Logging & Audit Trail | 5 | ⏳ Pendiente | Sprint 9 | - |
 
 ### Epic 12: Testing & Quality
-**Completado:** 3/13 puntos (23%)
+**Completado:** 11/13 puntos (85%)
 
 | HU | Título | Puntos | Estado | Sprint | Notas |
 |----|--------|--------|--------|--------|-------|
-| HU-039 | Unit Testing Setup | 3 | ✅ Completado | Sprint 1 | Jest configurado, 47 tests pasando |
-| HU-040 | Integration Testing | 8 | ⏳ Pendiente | Sprint 4 | - |
+| HU-039 | Unit Testing Setup | 3 | ✅ Completado | Sprint 1 | Jest configurado, 114 tests pasando |
+| HU-040 | Integration Testing | 8 | ✅ Completado | Sprint 4 | Supertest setup, HTTP test files |
 | HU-041 | Test Coverage Requirements | 2 | ⏳ Pendiente | Sprint 7 | - |
 
 ### Epic 13: Development Experience
@@ -182,33 +182,37 @@ Este documento registra el progreso de implementación de todas las historias de
 
 ---
 
-### ⏳ Sprint 4: CI/CD & User Management (En Progreso)
-**Story Points:** 5/26 (19%)
-**Fecha Estimada:** 2025-10-07
+### ✅ Sprint 4: CI/CD & User Management (Completado)
+**Story Points:** 26/26 (100%)
+**Fecha:** 2025-10-07
 
 **Historias Completadas:**
 - ✅ HU-045: GitHub Actions CI Pipeline (5 pts)
+- ✅ HU-007: User CRUD Operations (8 pts)
+- ✅ HU-008: User Password Management (3 pts)
+- ✅ HU-009: User Statistics (2 pts)
+- ✅ HU-040: Integration Testing (8 pts)
 
-**Historias Planificadas:**
-- ⏳ HU-007: User CRUD Operations (8 pts)
-- ⏳ HU-008: User Password Management (3 pts)
-- ⏳ HU-009: User Statistics (2 pts)
-- ⏳ HU-040: Integration Testing (8 pts)
-
-**Branch:** `feature/HU-004-to-HU-029-sprint-2-authentication-security` (continuación)
-**Commits:** `a016b1d`
+**Branch:** `main`
+**Commit:** `20d29bb`
 
 **Entregables:**
 - ✅ GitHub Actions workflow configurado (.github/workflows/ci.yml)
 - ✅ CI ejecuta tests, lint y build en cada push/PR
 - ✅ Matrix testing con Node 18.x y 20.x
-- ✅ Upload de coverage a Codecov (opcional)
-- ✅ Artifacts de build archivados
-- ⏳ User CRUD (pendiente)
-- ⏳ Integration tests (pendiente)
+- ✅ User CRUD completo con 7 endpoints
+- ✅ UserService con 22 unit tests
+- ✅ HTTP test files para testing manual
+- ✅ Supertest configurado para integration tests
+- ✅ 114 tests unitarios pasando
 
 **Archivos Clave:**
 - `.github/workflows/ci.yml` - GitHub Actions CI pipeline
+- `src/services/UserService.ts` - Servicio de gestión de usuarios
+- `src/services/UserService.test.ts` - 22 unit tests
+- `src/routes/user.routes.ts` - Rutas de usuarios con Swagger
+- `src/schemas/user.schemas.ts` - Validación con Zod
+- `tests/users.http` - HTTP test file para testing manual
 
 ---
 
@@ -272,33 +276,30 @@ Este documento registra el progreso de implementación de todas las historias de
 | Componente | Coverage | Estado |
 |------------|----------|--------|
 | AuthService | 100% | ✅ Excelente |
+| UserService | 100% | ✅ Excelente |
 | Authorize Middleware | 100% | ✅ Excelente |
 | FileStorage | 88.28% | ✅ Bueno |
 | API Response Utils | 100% | ✅ Excelente |
 | Error Utils | 100% | ✅ Excelente |
 | Pagination Utils | 100% | ✅ Excelente |
-| **Global** | **~59%** | 🟡 En progreso |
+| **Global** | **~65%** | 🟡 En progreso |
 
 **Meta Global:** 70% coverage (se alcanzará en Sprint 7)
 
 ### Tests
-- **Total de tests:** 92
-- **Tests pasando:** 92 (100%)
+- **Total de tests:** 114
+- **Tests pasando:** 114 (100%)
 - **Tests fallando:** 0
 
 ---
 
 ## 🚀 Próximos Pasos
 
-### Sprint 4 (En Progreso)
-1. ✅ GitHub Actions CI Pipeline (5 pts) - Completado
-2. Implementar User CRUD Operations (8 pts)
-3. User Password Management (3 pts)
-4. User Statistics (2 pts)
-5. Integration Testing Setup (8 pts)
-6. Crear HTTP test files para users
+### Sprint 5 (Próximo)
+**Story Points:** 24 puntos
+**Objetivo:** Gestión de Clientes
 
-### Sprint 5
+**Historias Planificadas:**
 1. Implementar Client CRUD Operations
 2. Client Validation and Business Rules
 3. Client Contracts View
