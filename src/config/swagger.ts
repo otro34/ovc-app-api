@@ -73,6 +73,77 @@ const swaggerDefinition = {
           },
         },
       },
+      Client: {
+        type: 'object',
+        properties: {
+          id: {
+            type: 'integer',
+            description: 'Client ID',
+          },
+          name: {
+            type: 'string',
+            description: 'Client name',
+          },
+          email: {
+            type: 'string',
+            format: 'email',
+            description: 'Client email address',
+          },
+          phone: {
+            type: 'string',
+            description: 'Client phone number',
+          },
+          address: {
+            type: 'string',
+            description: 'Client address',
+          },
+          createdAt: {
+            type: 'string',
+            format: 'date-time',
+            description: 'Creation timestamp',
+          },
+          updatedAt: {
+            type: 'string',
+            format: 'date-time',
+            description: 'Last update timestamp',
+          },
+        },
+      },
+      PaginationMetadata: {
+        type: 'object',
+        properties: {
+          page: {
+            type: 'integer',
+            description: 'Current page number',
+            example: 1,
+          },
+          limit: {
+            type: 'integer',
+            description: 'Items per page',
+            example: 10,
+          },
+          total: {
+            type: 'integer',
+            description: 'Total number of items',
+            example: 100,
+          },
+          totalPages: {
+            type: 'integer',
+            description: 'Total number of pages',
+            example: 10,
+          },
+          hasNext: {
+            type: 'boolean',
+            description: 'Whether there is a next page',
+            example: true,
+          },
+          hasPrev: {
+            type: 'boolean',
+            description: 'Whether there is a previous page',
+            example: false,
+          },
+        },
+      },
       LoginRequest: {
         type: 'object',
         required: ['username', 'password'],
@@ -383,7 +454,7 @@ const swaggerDefinition = {
       },
     },
     responses: {
-      Unauthorized: {
+      UnauthorizedError: {
         description: 'Unauthorized - Invalid or missing authentication token',
         content: {
           'application/json': {
@@ -394,7 +465,7 @@ const swaggerDefinition = {
               success: false,
               message: 'Unauthorized',
               error: {
-                code: 'UNAUTHORIZED',
+                code: 'AUTH_1004',
                 message: 'Authentication token is required',
               },
               timestamp: '2025-10-06T11:00:00.000Z',
@@ -402,7 +473,7 @@ const swaggerDefinition = {
           },
         },
       },
-      Forbidden: {
+      ForbiddenError: {
         description: 'Forbidden - Insufficient permissions',
         content: {
           'application/json': {
@@ -413,7 +484,7 @@ const swaggerDefinition = {
               success: false,
               message: 'Forbidden',
               error: {
-                code: 'FORBIDDEN',
+                code: 'AUTH_1005',
                 message: 'You do not have permission to access this resource',
               },
               timestamp: '2025-10-06T11:00:00.000Z',
@@ -421,7 +492,7 @@ const swaggerDefinition = {
           },
         },
       },
-      NotFound: {
+      NotFoundError: {
         description: 'Not Found - Resource does not exist',
         content: {
           'application/json': {
@@ -431,7 +502,7 @@ const swaggerDefinition = {
             example: {
               success: false,
               error: {
-                code: 'NOT_FOUND',
+                code: 'RES_3001',
                 message: 'Resource not found',
               },
               timestamp: '2025-10-06T11:00:00.000Z',
@@ -465,6 +536,24 @@ const swaggerDefinition = {
                     code: 'invalid_string',
                   },
                 ],
+              },
+              timestamp: '2025-10-06T11:00:00.000Z',
+            },
+          },
+        },
+      },
+      ConflictError: {
+        description: 'Conflict - Resource already exists or conflicts with existing data',
+        content: {
+          'application/json': {
+            schema: {
+              $ref: '#/components/schemas/ErrorResponse',
+            },
+            example: {
+              success: false,
+              error: {
+                code: 'BIZ_4002',
+                message: 'Client with this email already exists',
               },
               timestamp: '2025-10-06T11:00:00.000Z',
             },

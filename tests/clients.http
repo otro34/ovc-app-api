@@ -1,0 +1,413 @@
+### OVC-APP API - Client Management Tests
+### Base URL and Variables
+@baseUrl = http://localhost:3001/api/v1
+@authToken = {{$dotenv AUTH_TOKEN}}
+
+### 1. LOGIN FIRST - Get JWT Token (run this first!)
+# @name login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "admin123"
+}
+
+> {%
+  // Store the token for subsequent requests
+  client.global.set("authToken", response.body.token);
+  client.log("Token saved: " + response.body.token.substring(0, 20) + "...");
+%}
+
+###
+
+### 2. LIST ALL CLIENTS (Paginated)
+# @name listClients
+GET {{baseUrl}}/clients?page=1&limit=10&sortBy=createdAt&sortOrder=desc
+Authorization: Bearer {{authToken}}
+
+###
+
+### 3. LIST CLIENTS WITH SEARCH
+# @name searchClients
+GET {{baseUrl}}/clients?search=acme&page=1&limit=10
+Authorization: Bearer {{authToken}}
+
+###
+
+### 4. GET CLIENT STATISTICS
+# @name clientStats
+GET {{baseUrl}}/clients/stats
+Authorization: Bearer {{authToken}}
+
+###
+
+### 5. CREATE NEW CLIENT (Full details)
+# @name createClient
+POST {{baseUrl}}/clients
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "name": "Acme Corporation",
+  "email": "contact@acme.com",
+  "phone": "+1234567890",
+  "address": "123 Main Street, New York, NY 10001"
+}
+
+> {%
+  // Store the client ID for subsequent requests
+  if (response.body.data && response.body.data.id) {
+    client.global.set("clientId", response.body.data.id);
+    client.log("Client ID saved: " + response.body.data.id);
+  }
+%}
+
+###
+
+### 6. CREATE CLIENT (Minimal - name only)
+# @name createMinimalClient
+POST {{baseUrl}}/clients
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "name": "Simple Client Inc"
+}
+
+###
+
+### 7. GET CLIENT BY ID
+# @name getClientById
+@clientId = {{$dotenv CLIENT_ID}}
+GET {{baseUrl}}/clients/{{clientId}}
+Authorization: Bearer {{authToken}}
+
+###
+
+### 8. UPDATE CLIENT
+# @name updateClient
+@clientId = {{$dotenv CLIENT_ID}}
+PUT {{baseUrl}}/clients/{{clientId}}
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "name": "Acme Corporation Updated",
+  "phone": "+1987654321",
+  "address": "456 Second Avenue, Los Angeles, CA 90001"
+}
+
+###
+
+### 9. UPDATE CLIENT EMAIL
+# @name updateClientEmail
+@clientId = {{$dotenv CLIENT_ID}}
+PUT {{baseUrl}}/clients/{{clientId}}
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "email": "newemail@acme.com"
+}
+
+###
+
+### 10. DELETE CLIENT (Admin only)
+# @name deleteClient
+@clientId = {{$dotenv CLIENT_ID}}
+DELETE {{baseUrl}}/clients/{{clientId}}
+Authorization: Bearer {{authToken}}
+
+###
+
+### ERROR CASES ###
+
+### 11. CREATE CLIENT - DUPLICATE EMAIL (Should fail)
+# @name createDuplicateEmail
+POST {{baseUrl}}/clients
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "name": "Another Company",
+  "email": "contact@acme.com"
+}
+
+###
+
+### 12. CREATE CLIENT - MISSING NAME (Should fail)
+# @name createWithoutName
+POST {{baseUrl}}/clients
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "email": "test@example.com",
+  "phone": "+1234567890"
+}
+
+###
+
+### 13. CREATE CLIENT - INVALID EMAIL FORMAT (Should fail)
+# @name createInvalidEmail
+POST {{baseUrl}}/clients
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "name": "Test Client",
+  "email": "invalid-email"
+}
+
+###
+
+### 14. UPDATE NON-EXISTENT CLIENT (Should fail)
+# @name updateNonExistent
+PUT {{baseUrl}}/clients/999999
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "name": "Updated Name"
+}
+
+###
+
+### 15. UPDATE CLIENT - EMPTY BODY (Should fail)
+# @name updateEmptyBody
+@clientId = {{$dotenv CLIENT_ID}}
+PUT {{baseUrl}}/clients/{{clientId}}
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{}
+
+###
+
+### 16. UPDATE CLIENT - DUPLICATE EMAIL (Should fail)
+# @name updateDuplicateEmail
+@clientId = {{$dotenv CLIENT_ID}}
+PUT {{baseUrl}}/clients/{{clientId}}
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "email": "contact@acme.com"
+}
+
+###
+
+### 17. GET NON-EXISTENT CLIENT (Should fail)
+# @name getNonExistent
+GET {{baseUrl}}/clients/999999
+Authorization: Bearer {{authToken}}
+
+###
+
+### 18. DELETE NON-EXISTENT CLIENT (Should fail)
+# @name deleteNonExistent
+DELETE {{baseUrl}}/clients/999999
+Authorization: Bearer {{authToken}}
+
+###
+
+### 19. DELETE CLIENT WITHOUT ADMIN ROLE (Should fail)
+# First login as regular user
+# @name loginUser
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "username": "user",
+  "password": "user123"
+}
+
+> {%
+  client.global.set("userToken", response.body.token);
+%}
+
+###
+
+# @name deleteAsUser
+@clientId = {{$dotenv CLIENT_ID}}
+@userToken = {{$dotenv USER_TOKEN}}
+DELETE {{baseUrl}}/clients/{{clientId}}
+Authorization: Bearer {{userToken}}
+
+###
+
+### 20. ACCESS WITHOUT TOKEN (Should fail)
+# @name unauthorizedAccess
+GET {{baseUrl}}/clients
+# No Authorization header
+
+###
+
+### PAGINATION TESTS ###
+
+### 21. TEST PAGINATION - PAGE 1
+# @name page1
+GET {{baseUrl}}/clients?page=1&limit=5
+Authorization: Bearer {{authToken}}
+
+###
+
+### 22. TEST PAGINATION - PAGE 2
+# @name page2
+GET {{baseUrl}}/clients?page=2&limit=5
+Authorization: Bearer {{authToken}}
+
+###
+
+### 23. TEST SORTING - BY NAME ASC
+# @name sortNameAsc
+GET {{baseUrl}}/clients?sortBy=name&sortOrder=asc
+Authorization: Bearer {{authToken}}
+
+###
+
+### 24. TEST SORTING - BY EMAIL DESC
+# @name sortEmailDesc
+GET {{baseUrl}}/clients?sortBy=email&sortOrder=desc
+Authorization: Bearer {{authToken}}
+
+###
+
+### 25. INVALID SORT FIELD (Should use default)
+# @name invalidSort
+GET {{baseUrl}}/clients?sortBy=invalid&sortOrder=asc
+Authorization: Bearer {{authToken}}
+
+###
+
+### CLIENT WITH CONTRACTS TEST (for future HU-012) ###
+
+### 26. DELETE CLIENT WITH ACTIVE CONTRACTS (Should fail once contracts are implemented)
+# This will need a client that has contracts associated
+# @name deleteClientWithContracts
+@clientWithContracts = 1
+DELETE {{baseUrl}}/clients/{{clientWithContracts}}
+Authorization: Bearer {{authToken}}
+
+###
+
+### BATCH OPERATIONS FOR TESTING ###
+
+### 27. CREATE MULTIPLE CLIENTS FOR TESTING
+# @name batchCreate
+
+### Client 1
+POST {{baseUrl}}/clients
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "name": "Test Company Alpha",
+  "email": "alpha@test.com",
+  "phone": "+1111111111",
+  "address": "111 Alpha St"
+}
+
+###
+
+### Client 2
+POST {{baseUrl}}/clients
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "name": "Test Company Beta",
+  "email": "beta@test.com",
+  "phone": "+2222222222",
+  "address": "222 Beta Ave"
+}
+
+###
+
+### Client 3
+POST {{baseUrl}}/clients
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "name": "Test Company Gamma",
+  "email": "gamma@test.com",
+  "phone": "+3333333333",
+  "address": "333 Gamma Blvd"
+}
+
+###
+
+### Client 4
+POST {{baseUrl}}/clients
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "name": "Test Company Delta",
+  "email": "delta@test.com"
+}
+
+###
+
+### Client 5
+POST {{baseUrl}}/clients
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "name": "Test Company Epsilon"
+}
+
+###
+
+### VALIDATION LENGTH TESTS ###
+
+### 28. CREATE CLIENT - NAME TOO LONG (Should fail)
+# @name nameTooLong
+POST {{baseUrl}}/clients
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "name": "This is an extremely long client name that exceeds the maximum allowed length of 255 characters. This name is deliberately made very long to test the validation rules. It should be rejected by the API because it violates the length constraint. Adding more text to ensure it exceeds 255 characters limit for testing purposes."
+}
+
+###
+
+### 29. CREATE CLIENT - EMAIL TOO LONG (Should fail)
+# @name emailTooLong
+POST {{baseUrl}}/clients
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "name": "Valid Name",
+  "email": "thisemailaddressiswaytoolongandexceedsthemaximumallowedlengthof255charactersthisemailaddressiswaytoolongandexceedsthemaximumallowedlengthof255charactersthisemailaddressiswaytoolongandexceedsthemaximumallowedlengthof255characters@verylongdomain.com"
+}
+
+###
+
+### 30. CREATE CLIENT - PHONE TOO LONG (Should fail)
+# @name phoneTooLong
+POST {{baseUrl}}/clients
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "name": "Valid Name",
+  "phone": "+111111111122222222223333333333444444444455555555556"
+}
+
+###
+
+### NOTES FOR TESTING:
+# 1. Run login first to get auth token
+# 2. Create some test clients before running search/pagination tests
+# 3. Use the stored clientId for update/delete operations
+# 4. Test with both admin and regular user tokens for authorization
+# 5. Verify error responses match expected format
+# 6. Check pagination metadata in responses
+# 7. Verify sorting works correctly
+# 8. Test business rules (duplicate emails, required fields, etc.)

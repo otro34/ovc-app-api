@@ -94,7 +94,7 @@ export function noContentResponse(res: Response): void {
 /**
  * Paginated response helper (overload 1 - accepts paginated data object)
  */
-// eslint-disable-next-line no-redeclare
+
 export function paginatedResponse<T>(
   res: Response,
   paginatedData: { items: T[]; pagination: PaginationMeta },
