@@ -27,8 +27,10 @@ export class ClientService {
     if (filters?.search) {
       const searchLower = filters.search.toLowerCase();
       clients = clients.filter(
-        (c) =>
-          c.name.toLowerCase().includes(searchLower) || c.email?.toLowerCase().includes(searchLower)
+        (c) => {
+          const email = c.email ? c.email.toLowerCase() : '';
+          return c.name.toLowerCase().includes(searchLower) || email.includes(searchLower);
+        }
       );
     }
 
