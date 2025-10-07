@@ -92,25 +92,66 @@ export function noContentResponse(res: Response): void {
 }
 
 /**
- * Paginated response helper
+ * Paginated response helper (overload 1 - accepts paginated data object)
  */
+// eslint-disable-next-line no-redeclare
+export function paginatedResponse<T>(
+  res: Response,
+  paginatedData: { items: T[]; pagination: PaginationMeta },
+  message?: string
+): void;
+
+/**
+ * Paginated response helper (overload 2 - accepts individual parameters)
+ */
+// eslint-disable-next-line no-redeclare
 export function paginatedResponse<T>(
   res: Response,
   data: T[],
   page: number,
   limit: number,
   total: number,
+  message?: string
+): void;
+
+/**
+ * Paginated response helper implementation
+ */
+// eslint-disable-next-line no-redeclare
+export function paginatedResponse<T>(
+  res: Response,
+  dataOrPaginated: T[] | { items: T[]; pagination: PaginationMeta },
+  pageOrMessage?: number | string,
+  limit?: number,
+  total?: number,
   message = 'Success'
 ): void {
-  const totalPages = Math.ceil(total / limit);
-  const meta: PaginationMeta = {
-    page,
-    limit,
-    total,
-    totalPages,
-    hasNext: page < totalPages,
-    hasPrev: page > 1,
-  };
+  let data: T[];
+  let meta: PaginationMeta;
+
+  // Check if first parameter is paginated data object
+  if (
+    typeof dataOrPaginated === 'object' &&
+    'items' in dataOrPaginated &&
+    'pagination' in dataOrPaginated
+  ) {
+    data = dataOrPaginated.items;
+    meta = dataOrPaginated.pagination;
+    message = (pageOrMessage as string) || message;
+  } else {
+    // Traditional parameters
+    data = dataOrPaginated as T[];
+    const page = pageOrMessage as number;
+    const totalPages = Math.ceil(total! / limit!);
+    meta = {
+      page,
+      limit: limit!,
+      total: total!,
+      totalPages,
+      hasNext: page < totalPages,
+      hasPrev: page > 1,
+    };
+  }
 
   successResponse(res, data, message, 200, meta);
 }
