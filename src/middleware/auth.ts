@@ -7,11 +7,7 @@ export interface AuthRequest extends Request {
   user?: Omit<User, 'password'>;
 }
 
-export const authenticate = (
-  req: AuthRequest,
-  res: Response,
-  next: NextFunction
-): void => {
+export const authenticate = (req: AuthRequest, res: Response, next: NextFunction): void => {
   try {
     const authHeader = req.headers.authorization;
 
@@ -21,9 +17,9 @@ export const authenticate = (
         message: 'No token provided',
         error: {
           code: 'UNAUTHORIZED',
-          message: 'Authentication token is required'
+          message: 'Authentication token is required',
         },
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       });
       return;
     }
@@ -41,9 +37,9 @@ export const authenticate = (
         message: 'Invalid token',
         error: {
           code: 'INVALID_TOKEN',
-          message: 'The provided token is invalid or expired'
+          message: 'The provided token is invalid or expired',
         },
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       });
       return;
     }
@@ -53,9 +49,9 @@ export const authenticate = (
       message: 'Internal server error',
       error: {
         code: 'INTERNAL_ERROR',
-        message: 'An error occurred during authentication'
+        message: 'An error occurred during authentication',
       },
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   }
 };
@@ -67,7 +63,7 @@ export const generateToken = (user: Omit<User, 'password'>): string => {
       username: user.username,
       email: user.email,
       name: user.name,
-      role: user.role
+      role: user.role,
     },
     env.jwtSecret,
     { expiresIn: '8h' }

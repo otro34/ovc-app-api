@@ -9,22 +9,22 @@ const swaggerDefinition = {
     description: 'REST API for managing sales contracts and purchase orders for a palm oil company',
     contact: {
       name: 'API Support',
-      email: 'otro34@hotmail.com'
+      email: 'otro34@hotmail.com',
     },
     license: {
       name: 'ISC',
-      url: 'https://opensource.org/licenses/ISC'
-    }
+      url: 'https://opensource.org/licenses/ISC',
+    },
   },
   servers: [
     {
       url: `http://localhost:${config.port}/api/v1`,
-      description: 'Development server'
+      description: 'Development server',
     },
     {
       url: 'http://localhost:3001/api/v1',
-      description: 'Local server'
-    }
+      description: 'Local server',
+    },
   ],
   components: {
     securitySchemes: {
@@ -32,8 +32,8 @@ const swaggerDefinition = {
         type: 'http',
         scheme: 'bearer',
         bearerFormat: 'JWT',
-        description: 'JWT authorization header using the Bearer scheme. Example: "Bearer {token}"'
-      }
+        description: 'JWT authorization header using the Bearer scheme. Example: "Bearer {token}"',
+      },
     },
     schemas: {
       User: {
@@ -41,37 +41,37 @@ const swaggerDefinition = {
         properties: {
           id: {
             type: 'integer',
-            description: 'User ID'
+            description: 'User ID',
           },
           username: {
             type: 'string',
-            description: 'Username'
+            description: 'Username',
           },
           email: {
             type: 'string',
             format: 'email',
-            description: 'User email address'
+            description: 'User email address',
           },
           name: {
             type: 'string',
-            description: 'User full name'
+            description: 'User full name',
           },
           role: {
             type: 'string',
             enum: ['admin', 'user'],
-            description: 'User role'
+            description: 'User role',
           },
           createdAt: {
             type: 'string',
             format: 'date-time',
-            description: 'Creation timestamp'
+            description: 'Creation timestamp',
           },
           updatedAt: {
             type: 'string',
             format: 'date-time',
-            description: 'Last update timestamp'
-          }
-        }
+            description: 'Last update timestamp',
+          },
+        },
       },
       LoginRequest: {
         type: 'object',
@@ -79,26 +79,26 @@ const swaggerDefinition = {
         properties: {
           username: {
             type: 'string',
-            description: 'Username'
+            description: 'Username',
           },
           password: {
             type: 'string',
             format: 'password',
-            description: 'User password'
-          }
-        }
+            description: 'User password',
+          },
+        },
       },
       LoginResponse: {
         type: 'object',
         properties: {
           token: {
             type: 'string',
-            description: 'JWT token'
+            description: 'JWT token',
           },
           user: {
-            $ref: '#/components/schemas/User'
-          }
-        }
+            $ref: '#/components/schemas/User',
+          },
+        },
       },
       RegisterRequest: {
         type: 'object',
@@ -106,29 +106,29 @@ const swaggerDefinition = {
         properties: {
           username: {
             type: 'string',
-            description: 'Username'
+            description: 'Username',
           },
           password: {
             type: 'string',
             format: 'password',
-            description: 'User password'
+            description: 'User password',
           },
           email: {
             type: 'string',
             format: 'email',
-            description: 'User email address'
+            description: 'User email address',
           },
           name: {
             type: 'string',
-            description: 'User full name'
+            description: 'User full name',
           },
           role: {
             type: 'string',
             enum: ['admin', 'user'],
             description: 'User role',
-            default: 'user'
-          }
-        }
+            default: 'user',
+          },
+        },
       },
       ChangePasswordRequest: {
         type: 'object',
@@ -137,41 +137,41 @@ const swaggerDefinition = {
           currentPassword: {
             type: 'string',
             format: 'password',
-            description: 'Current password'
+            description: 'Current password',
           },
           newPassword: {
             type: 'string',
             format: 'password',
-            description: 'New password'
+            description: 'New password',
           },
           confirmPassword: {
             type: 'string',
             format: 'password',
-            description: 'Confirm new password'
-          }
-        }
+            description: 'Confirm new password',
+          },
+        },
       },
       SuccessResponse: {
         type: 'object',
         properties: {
           success: {
             type: 'boolean',
-            description: 'Success status'
+            description: 'Success status',
           },
           data: {
             type: 'object',
-            description: 'Response data'
+            description: 'Response data',
           },
           message: {
             type: 'string',
-            description: 'Response message'
+            description: 'Response message',
           },
           timestamp: {
             type: 'string',
             format: 'date-time',
-            description: 'Response timestamp'
-          }
-        }
+            description: 'Response timestamp',
+          },
+        },
       },
       ErrorResponse: {
         type: 'object',
@@ -179,35 +179,35 @@ const swaggerDefinition = {
           success: {
             type: 'boolean',
             description: 'Success status',
-            example: false
+            example: false,
           },
           message: {
             type: 'string',
-            description: 'Error message'
+            description: 'Error message',
           },
           error: {
             type: 'object',
             properties: {
               code: {
                 type: 'string',
-                description: 'Error code'
+                description: 'Error code',
               },
               message: {
                 type: 'string',
-                description: 'Detailed error message'
+                description: 'Detailed error message',
               },
               details: {
                 type: 'object',
-                description: 'Additional error details'
-              }
-            }
+                description: 'Additional error details',
+              },
+            },
           },
           timestamp: {
             type: 'string',
             format: 'date-time',
-            description: 'Error timestamp'
-          }
-        }
+            description: 'Error timestamp',
+          },
+        },
       },
       PaginationMeta: {
         type: 'object',
@@ -215,34 +215,34 @@ const swaggerDefinition = {
           page: {
             type: 'integer',
             description: 'Current page number',
-            example: 1
+            example: 1,
           },
           limit: {
             type: 'integer',
             description: 'Items per page',
-            example: 10
+            example: 10,
           },
           total: {
             type: 'integer',
             description: 'Total number of items',
-            example: 100
+            example: 100,
           },
           totalPages: {
             type: 'integer',
             description: 'Total number of pages',
-            example: 10
+            example: 10,
           },
           hasNext: {
             type: 'boolean',
             description: 'Whether there is a next page',
-            example: true
+            example: true,
           },
           hasPrev: {
             type: 'boolean',
             description: 'Whether there is a previous page',
-            example: false
-          }
-        }
+            example: false,
+          },
+        },
       },
       PaginatedResponse: {
         type: 'object',
@@ -250,29 +250,29 @@ const swaggerDefinition = {
           success: {
             type: 'boolean',
             description: 'Success status',
-            example: true
+            example: true,
           },
           data: {
             type: 'array',
             items: {
-              type: 'object'
+              type: 'object',
             },
-            description: 'Response data'
+            description: 'Response data',
           },
           message: {
             type: 'string',
             description: 'Response message',
-            example: 'Success'
+            example: 'Success',
           },
           timestamp: {
             type: 'string',
             format: 'date-time',
-            description: 'Response timestamp'
+            description: 'Response timestamp',
           },
           meta: {
-            $ref: '#/components/schemas/PaginationMeta'
-          }
-        }
+            $ref: '#/components/schemas/PaginationMeta',
+          },
+        },
       },
       ValidationErrorDetails: {
         type: 'object',
@@ -280,23 +280,23 @@ const swaggerDefinition = {
           field: {
             type: 'string',
             description: 'Field name that failed validation',
-            example: 'username'
+            example: 'username',
           },
           message: {
             type: 'string',
             description: 'Validation error message',
-            example: 'Username must be at least 3 characters'
+            example: 'Username must be at least 3 characters',
           },
           code: {
             type: 'string',
             description: 'Validation error code',
-            example: 'too_small'
+            example: 'too_small',
           },
           received: {
-            description: 'Received value (if applicable)'
-          }
-        }
-      }
+            description: 'Received value (if applicable)',
+          },
+        },
+      },
     },
     responses: {
       Unauthorized: {
@@ -304,63 +304,63 @@ const swaggerDefinition = {
         content: {
           'application/json': {
             schema: {
-              $ref: '#/components/schemas/ErrorResponse'
+              $ref: '#/components/schemas/ErrorResponse',
             },
             example: {
               success: false,
               message: 'Unauthorized',
               error: {
                 code: 'UNAUTHORIZED',
-                message: 'Authentication token is required'
+                message: 'Authentication token is required',
               },
-              timestamp: '2025-10-06T11:00:00.000Z'
-            }
-          }
-        }
+              timestamp: '2025-10-06T11:00:00.000Z',
+            },
+          },
+        },
       },
       Forbidden: {
         description: 'Forbidden - Insufficient permissions',
         content: {
           'application/json': {
             schema: {
-              $ref: '#/components/schemas/ErrorResponse'
+              $ref: '#/components/schemas/ErrorResponse',
             },
             example: {
               success: false,
               message: 'Forbidden',
               error: {
                 code: 'FORBIDDEN',
-                message: 'You do not have permission to access this resource'
+                message: 'You do not have permission to access this resource',
               },
-              timestamp: '2025-10-06T11:00:00.000Z'
-            }
-          }
-        }
+              timestamp: '2025-10-06T11:00:00.000Z',
+            },
+          },
+        },
       },
       NotFound: {
         description: 'Not Found - Resource does not exist',
         content: {
           'application/json': {
             schema: {
-              $ref: '#/components/schemas/ErrorResponse'
+              $ref: '#/components/schemas/ErrorResponse',
             },
             example: {
               success: false,
               error: {
                 code: 'NOT_FOUND',
-                message: 'Resource not found'
+                message: 'Resource not found',
               },
-              timestamp: '2025-10-06T11:00:00.000Z'
-            }
-          }
-        }
+              timestamp: '2025-10-06T11:00:00.000Z',
+            },
+          },
+        },
       },
       ValidationError: {
         description: 'Validation Error - Invalid input data',
         content: {
           'application/json': {
             schema: {
-              $ref: '#/components/schemas/ErrorResponse'
+              $ref: '#/components/schemas/ErrorResponse',
             },
             example: {
               success: false,
@@ -373,62 +373,62 @@ const swaggerDefinition = {
                     field: 'username',
                     message: 'Username must be at least 3 characters',
                     code: 'too_small',
-                    received: 'ab'
+                    received: 'ab',
                   },
                   {
                     field: 'email',
                     message: 'Invalid email format',
-                    code: 'invalid_string'
-                  }
-                ]
+                    code: 'invalid_string',
+                  },
+                ],
               },
-              timestamp: '2025-10-06T11:00:00.000Z'
-            }
-          }
-        }
-      }
-    }
+              timestamp: '2025-10-06T11:00:00.000Z',
+            },
+          },
+        },
+      },
+    },
   },
   security: [
     {
-      bearerAuth: []
-    }
+      bearerAuth: [],
+    },
   ],
   tags: [
     {
       name: 'Authentication',
-      description: 'Authentication and authorization endpoints'
+      description: 'Authentication and authorization endpoints',
     },
     {
       name: 'Users',
-      description: 'User management endpoints'
+      description: 'User management endpoints',
     },
     {
       name: 'Clients',
-      description: 'Client management endpoints'
+      description: 'Client management endpoints',
     },
     {
       name: 'Contracts',
-      description: 'Contract management endpoints'
+      description: 'Contract management endpoints',
     },
     {
       name: 'Purchase Orders',
-      description: 'Purchase order management endpoints'
+      description: 'Purchase order management endpoints',
     },
     {
       name: 'System',
-      description: 'System configuration and management endpoints'
+      description: 'System configuration and management endpoints',
     },
     {
       name: 'Health',
-      description: 'Health check and monitoring endpoints'
-    }
-  ]
+      description: 'Health check and monitoring endpoints',
+    },
+  ],
 };
 
 const options = {
   swaggerDefinition,
-  apis: ['./src/routes/*.ts', './src/app.ts']
+  apis: ['./src/routes/*.ts', './src/app.ts'],
 };
 
 export const swaggerSpec = swaggerJsdoc(options);

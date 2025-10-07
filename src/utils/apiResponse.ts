@@ -48,7 +48,7 @@ export function successResponse<T>(
     data,
     message,
     timestamp: new Date().toISOString(),
-    ...(meta && { meta })
+    ...(meta && { meta }),
   };
 
   res.status(statusCode).json(response);
@@ -67,7 +67,7 @@ export function errorResponse(
     success: false,
     message,
     error,
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
   };
 
   res.status(statusCode).json(response);
@@ -109,7 +109,7 @@ export function paginatedResponse<T>(
     total,
     totalPages,
     hasNext: page < totalPages,
-    hasPrev: page > 1
+    hasPrev: page > 1,
   };
 
   successResponse(res, data, message, 200, meta);

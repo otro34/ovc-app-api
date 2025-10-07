@@ -74,7 +74,7 @@ router.post(
         password,
         email,
         name,
-        role: role || 'user'
+        role: role || 'user',
       });
 
       createdResponse(res, user, 'User registered successfully');

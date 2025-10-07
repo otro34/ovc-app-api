@@ -8,29 +8,19 @@ import { ZodError } from 'zod';
  * Global error handling middleware
  * Must be the last middleware in the chain
  */
-export function errorHandler(
-  err: Error,
-  req: Request,
-  res: Response,
-  _next: NextFunction
-): void {
+export function errorHandler(err: Error, req: Request, res: Response, _next: NextFunction): void {
   // Log the error
   logger.error('Error handler caught:', {
     error: err.message,
     stack: err.stack,
     url: req.url,
     method: req.method,
-    ip: req.ip
+    ip: req.ip,
   });
 
   // Handle AppError instances
   if (err instanceof AppError) {
-    errorResponse(
-      res,
-      err.toApiError(),
-      err.message,
-      err.statusCode
-    );
+    errorResponse(res, err.toApiError(), err.message, err.statusCode);
     return;
   }
 
@@ -39,7 +29,7 @@ export function errorHandler(
     const details = err.issues.map((issue) => ({
       field: issue.path.join('.'),
       message: issue.message,
-      code: issue.code
+      code: issue.code,
     }));
 
     errorResponse(
@@ -47,7 +37,7 @@ export function errorHandler(
       {
         code: ErrorCode.VALIDATION_ERROR,
         message: 'Validation failed',
-        details
+        details,
       },
       'Validation error',
       400
@@ -61,7 +51,7 @@ export function errorHandler(
       res,
       {
         code: ErrorCode.INVALID_TOKEN,
-        message: 'Invalid token'
+        message: 'Invalid token',
       },
       'Invalid token',
       401
@@ -74,7 +64,7 @@ export function errorHandler(
       res,
       {
         code: ErrorCode.TOKEN_EXPIRED,
-        message: 'Token expired'
+        message: 'Token expired',
       },
       'Token expired',
       401
@@ -90,7 +80,7 @@ export function errorHandler(
     {
       code: ErrorCode.INTERNAL_SERVER_ERROR,
       message: 'An unexpected error occurred',
-      ...(isDevelopment && { details: err.stack })
+      ...(isDevelopment && { details: err.stack }),
     },
     err.message || 'Internal server error',
     500
@@ -111,16 +101,12 @@ export function asyncHandler<T>(
 /**
  * 404 Not Found handler
  */
-export function notFoundHandler(
-  req: Request,
-  res: Response,
-  _next: NextFunction
-): void {
+export function notFoundHandler(req: Request, res: Response, _next: NextFunction): void {
   errorResponse(
     res,
     {
       code: ErrorCode.RESOURCE_NOT_FOUND,
-      message: `Route ${req.method} ${req.url} not found`
+      message: `Route ${req.method} ${req.url} not found`,
     },
     'Route not found',
     404
