@@ -128,15 +128,19 @@ class DataSeeder {
       },
     ];
 
+    // Fetch all existing users once and build a set of usernames
+    const existingUsers = await this.userService.findAll();
+    const existingUsernames = new Set(existingUsers.map((u) => u.username));
+
     for (const userData of users) {
       try {
         // Check if user already exists
-        const existingUsers = await this.userService.findAll();
-        const userExists = existingUsers.some((u) => u.username === userData.username);
+        const userExists = existingUsernames.has(userData.username);
 
         if (!userExists) {
           await this.authService.register(userData);
           this.stats.users++;
+          existingUsernames.add(userData.username); // Update set in case registration is immediate
           console.log(`  ✅ Created user: ${userData.username} (${userData.role})`);
         } else {
           console.log(`  ⏭️  User already exists: ${userData.username}`);
