@@ -223,9 +223,7 @@ class DataSeeder {
     // Cache existing client emails (lowercased) for fast lookup
     const existingClients = await this.clientService.findAll();
     const existingEmails = new Set<string>(
-      existingClients
-        .map((c) => c.email?.toLowerCase())
-        .filter((email): email is string => !!email)
+      existingClients.map((c) => c.email?.toLowerCase()).filter((email): email is string => !!email)
     );
 
     for (const clientData of clients) {
