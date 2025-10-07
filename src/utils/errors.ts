@@ -190,4 +190,12 @@ export class ErrorFactory {
   static internalError(message = 'Internal server error', details?: unknown): AppError {
     return new AppError(ErrorCode.INTERNAL_SERVER_ERROR, message, details);
   }
+
+  static conflict(message: string): AppError {
+    return new AppError(ErrorCode.DUPLICATE_RESOURCE, message, undefined, 409);
+  }
+
+  static businessRule(message: string, code?: string): AppError {
+    return new AppError(ErrorCode.BUSINESS_RULE_VIOLATION, message, { code });
+  }
 }

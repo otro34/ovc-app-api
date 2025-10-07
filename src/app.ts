@@ -6,6 +6,7 @@ import { config } from './config/env';
 import logger from './config/logger';
 import authRoutes from './routes/auth.routes';
 import userRoutes from './routes/user.routes';
+import clientRoutes from './routes/client.routes';
 import {
   apiRateLimiter,
   authRateLimiter,
@@ -51,6 +52,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
 // API Routes
 app.use('/api/v1/auth', authRateLimiter, authRoutes);
 app.use('/api/v1/users', apiRateLimiter, userRoutes);
+app.use('/api/v1/clients', apiRateLimiter, clientRoutes);
 app.use('/api/v1', apiRateLimiter); // Apply rate limiting to all other API routes
 
 // Health check endpoint
