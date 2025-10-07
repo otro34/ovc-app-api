@@ -11,9 +11,9 @@ export const authorize = (...allowedRoles: UserRole[]) => {
         message: 'Unauthorized',
         error: {
           code: 'UNAUTHORIZED',
-          message: 'Authentication required'
+          message: 'Authentication required',
         },
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       });
       return;
     }
@@ -24,9 +24,9 @@ export const authorize = (...allowedRoles: UserRole[]) => {
         message: 'Forbidden',
         error: {
           code: 'FORBIDDEN',
-          message: 'You do not have permission to access this resource'
+          message: 'You do not have permission to access this resource',
         },
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       });
       return;
     }

@@ -11,12 +11,12 @@ export const apiRateLimiter = rateLimit({
     message: 'Too many requests from this IP, please try again later',
     error: {
       code: 'TOO_MANY_REQUESTS',
-      message: 'Rate limit exceeded'
+      message: 'Rate limit exceeded',
     },
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
   },
   standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
-  legacyHeaders: false // Disable the `X-RateLimit-*` headers
+  legacyHeaders: false, // Disable the `X-RateLimit-*` headers
   // Use default keyGenerator which properly handles IPv6
 });
 
@@ -29,12 +29,12 @@ export const authRateLimiter = rateLimit({
     message: 'Too many login attempts, please try again later',
     error: {
       code: 'TOO_MANY_ATTEMPTS',
-      message: 'Authentication rate limit exceeded'
+      message: 'Authentication rate limit exceeded',
     },
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
   },
   standardHeaders: true,
-  legacyHeaders: false
+  legacyHeaders: false,
   // Use default keyGenerator which properly handles IPv6
 });
 
@@ -84,9 +84,9 @@ export const validateContentType = (req: Request, res: Response, next: NextFunct
         message: 'Unsupported Media Type',
         error: {
           code: 'UNSUPPORTED_MEDIA_TYPE',
-          message: 'Content-Type must be application/json'
+          message: 'Content-Type must be application/json',
         },
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       });
       return;
     }

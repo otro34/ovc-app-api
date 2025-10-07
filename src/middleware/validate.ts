@@ -24,7 +24,7 @@ export function validate(schema: ZodSchema, target: ValidationTarget = 'body') {
           field: err.path.join('.'),
           message: err.message,
           code: err.code,
-          received: err.path.length > 0 ? getNestedValue(req[target], err.path) : undefined
+          received: err.path.length > 0 ? getNestedValue(req[target], err.path) : undefined,
         }));
 
         errorResponse(
@@ -32,7 +32,7 @@ export function validate(schema: ZodSchema, target: ValidationTarget = 'body') {
           {
             code: ErrorCode.VALIDATION_ERROR,
             message: 'Validation failed',
-            details
+            details,
           },
           'Request validation failed',
           400

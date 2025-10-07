@@ -45,6 +45,7 @@ export class AuthService {
     }
 
     // Generate token
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password: _, ...userWithoutPassword } = user;
     const token = generateToken(userWithoutPassword);
 
@@ -52,11 +53,13 @@ export class AuthService {
 
     return {
       token,
-      user: userWithoutPassword
+      user: userWithoutPassword,
     };
   }
 
-  async register(userData: Omit<User, 'id' | 'createdAt' | 'updatedAt'>): Promise<Omit<User, 'password'>> {
+  async register(
+    userData: Omit<User, 'id' | 'createdAt' | 'updatedAt'>
+  ): Promise<Omit<User, 'password'>> {
     logger.info(`Registering new user: ${userData.username}`);
 
     // Check if user already exists
@@ -83,13 +86,14 @@ export class AuthService {
     // Create user
     const newUser: Omit<User, 'id' | 'createdAt' | 'updatedAt'> = {
       ...userData,
-      password: hashedPassword
+      password: hashedPassword,
     };
 
     const createdUser = await this.userStorage.create(newUser);
 
     logger.info(`User registered successfully: ${userData.username}`);
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password: _, ...userWithoutPassword } = createdUser;
     return userWithoutPassword;
   }
@@ -137,6 +141,7 @@ export class AuthService {
       throw new Error('User not found');
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password: _, ...userWithoutPassword } = user;
     return userWithoutPassword;
   }

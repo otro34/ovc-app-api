@@ -49,7 +49,7 @@ export enum ErrorCode {
   PASSWORD_CHANGE_FAILED = 'USER_7002',
   USERNAME_EXISTS = 'USER_7003',
   EMAIL_EXISTS = 'USER_7004',
-  WEAK_PASSWORD = 'USER_7005'
+  WEAK_PASSWORD = 'USER_7005',
 }
 
 /**
@@ -103,7 +103,7 @@ export const ErrorStatusMap: Record<ErrorCode, number> = {
   [ErrorCode.PASSWORD_CHANGE_FAILED]: 400,
   [ErrorCode.USERNAME_EXISTS]: 409,
   [ErrorCode.EMAIL_EXISTS]: 409,
-  [ErrorCode.WEAK_PASSWORD]: 400
+  [ErrorCode.WEAK_PASSWORD]: 400,
 };
 
 /**
@@ -114,12 +114,7 @@ export class AppError extends Error {
   public readonly statusCode: number;
   public readonly details?: unknown;
 
-  constructor(
-    code: ErrorCode,
-    message: string,
-    details?: unknown,
-    statusCode?: number
-  ) {
+  constructor(code: ErrorCode, message: string, details?: unknown, statusCode?: number) {
     super(message);
     this.name = 'AppError';
     this.code = code;
@@ -136,7 +131,7 @@ export class AppError extends Error {
   toApiError() {
     const apiError: { code: ErrorCode; message: string; details?: unknown } = {
       code: this.code,
-      message: this.message
+      message: this.message,
     };
 
     if (this.details) {
@@ -168,16 +163,12 @@ export class ErrorFactory {
   }
 
   static notFound(resource: string, id?: string): AppError {
-    const message = id
-      ? `${resource} with id '${id}' not found`
-      : `${resource} not found`;
+    const message = id ? `${resource} with id '${id}' not found` : `${resource} not found`;
     return new AppError(ErrorCode.RESOURCE_NOT_FOUND, message);
   }
 
   static userNotFound(username?: string): AppError {
-    const message = username
-      ? `User '${username}' not found`
-      : 'User not found';
+    const message = username ? `User '${username}' not found` : 'User not found';
     return new AppError(ErrorCode.USER_NOT_FOUND, message);
   }
 
@@ -189,10 +180,7 @@ export class ErrorFactory {
   }
 
   static resourceInUse(resource: string, reason: string): AppError {
-    return new AppError(
-      ErrorCode.RESOURCE_IN_USE,
-      `Cannot delete ${resource}: ${reason}`
-    );
+    return new AppError(ErrorCode.RESOURCE_IN_USE, `Cannot delete ${resource}: ${reason}`);
   }
 
   static businessRuleViolation(message: string): AppError {

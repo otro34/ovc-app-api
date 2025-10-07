@@ -17,7 +17,7 @@ export const PAGINATION_CONFIG = {
   DEFAULT_LIMIT: 10,
   MAX_LIMIT: 100,
   MIN_LIMIT: 1,
-  MIN_PAGE: 1
+  MIN_PAGE: 1,
 };
 
 /**
@@ -43,11 +43,7 @@ export function getPaginationParams(req: Request): PaginationParams {
 /**
  * Paginate array of items
  */
-export function paginateArray<T>(
-  items: T[],
-  page: number,
-  limit: number
-): T[] {
+export function paginateArray<T>(items: T[], page: number, limit: number): T[] {
   const skip = (page - 1) * limit;
   return items.slice(skip, skip + limit);
 }
@@ -55,11 +51,7 @@ export function paginateArray<T>(
 /**
  * Calculate pagination metadata
  */
-export function calculatePaginationMeta(
-  total: number,
-  page: number,
-  limit: number
-) {
+export function calculatePaginationMeta(total: number, page: number, limit: number) {
   const totalPages = Math.ceil(total / limit);
 
   return {
@@ -68,6 +60,6 @@ export function calculatePaginationMeta(
     total,
     totalPages,
     hasNext: page < totalPages,
-    hasPrev: page > 1
+    hasPrev: page > 1,
   };
 }
