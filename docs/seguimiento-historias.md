@@ -206,7 +206,7 @@ Este documento registra el progreso de implementación de todas las historias de
 **Commit:** `808aa3b`
 
 **Entregables:**
-- ✅ ClientService con 100% test coverage
+- ✅ ClientService con 98.38% test coverage
 - ✅ 6 endpoints de clientes (CRUD + stats)
 - ✅ Validación con Zod
 - ✅ Búsqueda y paginación
